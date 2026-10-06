@@ -336,14 +336,33 @@ test("event aftermath previews a real threat and gives four safe seconds to repo
   assert.ok(world.activeEvent.timeLeft < eventTime);
 });
 
-test("Charma calms Sally and improves the relationship", () => {
+test("Charma calms Sally, shows its paired exchange immediately and respects cooldown", async () => {
+  const { CHARM_EXCHANGES } = await import("../src/core/data.js");
+  const { updateDialogue } = await import("../src/systems/dialogue.js?v=2");
   resetRun();
+  world.dialogue.text = "En gammal kommentar om plantor.";
+  world.dialogue.timer = 10;
+  world.dialogue.queue.push({ text: "Nästa planta.", lineIndex: -1, speaker: "girl", silent: true });
   world.annoyance = 30;
   const before = world.annoyance;
   act("f");
   assert.ok(world.annoyance < before);
   assert.equal(world.storyRun.relationship, 1);
   assert.ok(world.charmCooldown > 0);
+  assert.equal(world.girlfriendReaction.text, "♥");
+  const exchange = CHARM_EXCHANGES.find(pair => pair.compliment === world.dialogue.text);
+  assert.ok(exchange);
+  assert.equal(world.dialogue.speaker, "guy");
+  assert.equal(world.dialogue.queue[0].text, exchange.reply);
+  assert.equal(world.dialogue.queue[1].text, "Nästa planta.");
+  updateDialogue(20);
+  assert.equal(world.dialogue.text, exchange.reply);
+  assert.equal(world.dialogue.speaker, "girl");
+  const annoyance = world.annoyance;
+  act("gp_charm");
+  assert.equal(world.annoyance, annoyance);
+  assert.equal(world.storyRun.relationship, 1);
+  assert.equal(world.dialogue.text, exchange.reply);
 });
 
 test("context action stops an incoming placement when she is in reach", () => {

@@ -171,9 +171,9 @@ function drawCharmImpactBackdrop() {
   const radius = 30 + (1 - progress) * 24;
   const alpha = progress * 0.34;
   const gradient = ctx.createRadialGradient(cx, cy, 10, cx, cy, radius);
-  gradient.addColorStop(0, `rgba(196, 227, 255, ${alpha})`);
-  gradient.addColorStop(0.55, `rgba(155, 197, 255, ${alpha * 0.55})`);
-  gradient.addColorStop(1, "rgba(155, 197, 255, 0)");
+  gradient.addColorStop(0, `rgba(255, 196, 220, ${alpha})`);
+  gradient.addColorStop(0.55, `rgba(255, 155, 191, ${alpha * 0.55})`);
+  gradient.addColorStop(1, "rgba(255, 155, 191, 0)");
   ctx.fillStyle = gradient;
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -188,15 +188,15 @@ function drawCharmImpactForeground() {
   const cy = world.girlfriend.y + 24;
 
   if (progress > 0) {
-    ctx.fillStyle = `rgba(240, 249, 255, ${progress * 0.9})`;
+    ctx.fillStyle = `rgba(255, 157, 194, ${progress * 0.9})`;
     ctx.font = "bold 22px Trebuchet MS";
-    ctx.fillText("?", cx + 16, cy - 4 - (1 - progress) * 14);
-    ctx.fillText("?", cx - 26, cy + 6 - (1 - progress) * 11);
+    ctx.fillText("♥", cx + 16, cy - 4 - (1 - progress) * 14);
+    ctx.fillText("♥", cx - 26, cy + 6 - (1 - progress) * 11);
   }
 
   for (const spark of world.charmImpact.sparks) {
     const lifeRatio = spark.maxLife > 0 ? spark.life / spark.maxLife : 0;
-    ctx.fillStyle = `rgba(232, 245, 255, ${lifeRatio * 0.85})`;
+    ctx.fillStyle = `rgba(255, 206, 224, ${lifeRatio * 0.85})`;
     ctx.beginPath();
     ctx.arc(spark.x, spark.y, Math.max(1.2, spark.size * lifeRatio), 0, Math.PI * 2);
     ctx.fill();

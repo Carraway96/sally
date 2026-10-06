@@ -25,6 +25,15 @@ export function showGirlTextDialogue(text) {
   if (!world.dialogue.text) startNextDialogue();
 }
 
+export function showCharmExchange(exchange) {
+  // Play the compliment and its matching response immediately, ahead of plant chatter.
+  world.dialogue.queue.unshift(
+    { text: exchange.compliment, lineIndex: -1, speaker: "guy", silent: true },
+    { text: exchange.reply, lineIndex: -1, speaker: "girl", silent: true }
+  );
+  startNextDialogue();
+}
+
 export function startNextDialogue() {
   if (!world.dialogue.queue.length) {
     world.dialogue.text = "";

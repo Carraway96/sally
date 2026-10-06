@@ -147,6 +147,11 @@ export function playSfx(type) {
       { type: "triangle", f1: 740, f2: 540, d: 0.14, v: 0.055 },
       { type: "sine", f1: 980, f2: 620, d: 0.1, v: 0.018, delay: 0.02 },
     ],
+    charm: [
+      { type: "sine", f1: 523, f2: 523, d: 0.15, v: 0.035 },
+      { type: "sine", f1: 659, f2: 659, d: 0.15, v: 0.03, delay: 0.08 },
+      { type: "triangle", f1: 784, f2: 880, d: 0.24, v: 0.025, delay: 0.16 },
+    ],
     fail: [
       { type: "triangle", f1: 160, f2: 120, d: 0.24, v: 0.09 },
       { type: "sawtooth", f1: 220, f2: 80, d: 0.22, v: 0.025, delay: 0.01 },

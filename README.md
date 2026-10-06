@@ -6,6 +6,8 @@ Den enda leveln heter **Sally** och utspelar sig under tre kvällar. Sally är e
 
 **Charma** ersätter den tidigare förmågan: lugnar irritation, stärker relationen och har 18 sekunders cooldown. Sallys porträtt, fyra riktningar och odlingsföremålen är AI-genererade. Lägenhet, möbler, spelarkaraktär och musik kommer från originalspelet.
 
+Charma visar en komplimang följd av Sallys svar direkt, med rosa hjärtan och en mjuk ljudsignal.
+
 ## Spela lokalt
 
 Kör `python -m http.server 8080` i den här mappen och öppna http://localhost:8080. Spelet använder JavaScript-moduler och behöver en lokal webbserver.

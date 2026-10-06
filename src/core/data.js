@@ -51,7 +51,12 @@ export const GIRL_LINES = [
 ];
 
 
-export const GUY_LINES = ["Du har ett leende som gör hela lägenheten ljusare.", "Ska vi ta en paus och laga något med din basilika?", "Med dig här känns lägenheten redan grönare.", "Jag fixar te, du väljer plats åt chilin."];
+export const CHARM_EXCHANGES = [
+  { compliment: "Du har ett leende som gör hela lägenheten ljusare.", reply: "Nu blev jag faktiskt lite varm om kinderna." },
+  { compliment: "Ska vi ta en paus och laga något med din basilika?", reply: "Gärna. Jag hackar basilikan om du fixar resten." },
+  { compliment: "Jag gillar hur du får det att kännas som hemma här.", reply: "Det finaste är ändå att få vara här med dig." },
+  { compliment: "Jag fixar te. Sen får du berätta om dina odlingsplaner.", reply: "Okej, men bara om du sitter bredvid mig." },
+];
 
 
 

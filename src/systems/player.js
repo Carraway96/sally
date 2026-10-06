@@ -4,7 +4,7 @@ import {
   CHARM_HIT_DURATION,
   CHARM_PARTICLE_COUNT,
   CHARM_RELIEF,
-  GUY_LINES,
+  CHARM_EXCHANGES,
   INTERCEPT_RANGE,
   INTERACTION_RANGE,
   ITEM_TYPES,
@@ -14,7 +14,7 @@ import { world } from "../core/state.js";
 import { clamp, distance, getEntityNavPoint, moveEntity, rand, pick, roomFromPoint } from "../core/utils.js";
 import { getSelectedGirlProfile } from "../game/shared.js";
 import { setToast, showGirlfriendReaction } from "./feedback.js";
-import { showGirlTextDialogue, showGuyDialogue } from "./dialogue.js?v=2";
+import { showCharmExchange, showGirlTextDialogue, showGuyDialogue } from "./dialogue.js?v=2";
 import { consumeActionAnnoyanceMultiplier, hasDistractAbility, peekActionAnnoyanceMultiplier, tryUseDistract } from "./planning.js";
 import { registerPlayerAction } from "./ai.js";
 import { getChallengeMultiplier } from "./challenges.js";
@@ -299,7 +299,7 @@ function useCharm() {
   }
 
   if (world.annoyance <= 0) {
-    setToast("Hon är redan orimligt lugn.");
+    setToast("Sally är redan lugn. Spara charmen tills läget blir spänt.");
     return;
   }
 
@@ -309,13 +309,9 @@ function useCharm() {
   triggerCharmEffect();
   triggerCharmImpact(charmRelief);
   setToast(`Charma: irritation −${Math.round(charmRelief)}, relation +1. Sally ler och läget lugnar sig.`);
-  showGuyDialogue(pick(GUY_LINES));
-  showGirlTextDialogue(pick([
-    "Du är rätt söt när du föreslår en paus bland plantorna.",
-    "Okej, vi lagar något med basilikan tillsammans.",
-    "Du får mig att le. Men chilin vill fortfarande ha fönsterplats.",
-  ]));
-  playSfx("event");
+  showCharmExchange(pick(CHARM_EXCHANGES));
+  showGirlfriendReaction("♥", "#ffb1cb", 1.6);
+  playSfx("charm");
 }
 
 function showActionBanter(action, type, nearGirl) {
