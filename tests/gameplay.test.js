@@ -46,6 +46,35 @@ function item(id, typeId, x, y, value = 4) {
   return { id, typeId, room: "hall", x, y, value, age: 0, hidden: false, relocated: false };
 }
 
+test("walking follows actual movement and stops when collision blocks the player", async () => {
+  const { getWalkingPose } = await import("../src/systems/walking.js");
+  resetRun();
+  // Feet collider touches the apartment's left boundary.
+  placePlayerAt(30, 300);
+  const x = world.player.x;
+  updatePlayer(0.05, { keys: { a: true }, justPressed: new Set() }, () => ({}), () => {});
+  assert.equal(world.player.x, x);
+  assert.equal(getWalkingPose(world.player).frame, -1);
+  updatePlayer(0.05, { keys: { d: true }, justPressed: new Set() }, () => ({}), () => {});
+  assert.ok(world.player.x > x);
+  assert.ok(getWalkingPose(world.player).frame >= 0);
+  updatePlayer(0.05, { keys: {}, justPressed: new Set() }, () => ({}), () => {});
+  assert.equal(getWalkingPose(world.player).frame, -1);
+});
+
+test("walking respects reduced motion and ignores position jumps", async () => {
+  const { updateWalking, getWalkingPose } = await import("../src/systems/walking.js");
+  const entity = { x: 15, y: 0 };
+  updateWalking(entity, 0, 0, 0.1);
+  assert.equal(getWalkingPose(entity).frame, 1);
+  assert.deepEqual(getWalkingPose(entity, true), { frame: -1, bob: 0, sway: 0 });
+  entity.x = 500;
+  updateWalking(entity, 15, 0, 0.05);
+  assert.equal(getWalkingPose(entity).frame, -1);
+  resetRun();
+  assert.equal(getWalkingPose(world.girlfriend).frame, -1);
+});
+
 test("preview does not change state and using a mug applies its effect", () => {
   resetRun();
   const mug = item(1, "mug", 550, 500);

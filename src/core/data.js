@@ -51,7 +51,7 @@ export const GIRL_LINES = [
 ];
 
 
-export const GUY_LINES = ["Dina valnötsörhängen är nästan lika fina som ditt leende.", "Ska vi ta en paus och laga något med din basilika?", "Med dig här känns lägenheten redan grönare.", "Jag fixar te, du väljer plats åt chilin."];
+export const GUY_LINES = ["Du har ett leende som gör hela lägenheten ljusare.", "Ska vi ta en paus och laga något med din basilika?", "Med dig här känns lägenheten redan grönare.", "Jag fixar te, du väljer plats åt chilin."];
 
 
 

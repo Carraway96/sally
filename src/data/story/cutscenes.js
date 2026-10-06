@@ -1,6 +1,6 @@
 export const STORY_CUTSCENES = {};
 const evenings = [
-  ["Köket", "chili", "Chiliplantan behöver bara lite sol. Och halva fönsterbrädan.", "Jag trodde det var en lägenhet. Nu är det en plantskola.", "Sallys valnötsörhängen gungar. En kruka har redan flyttat in."],
+  ["Köket", "chili", "Chiliplantan behöver bara lite sol. Och halva fönsterbrädan.", "Jag trodde det var en lägenhet. Nu är det en plantskola.", "Sally ler nöjt. En kruka har redan flyttat in."],
   ["Vardagsrummet", "hanging_planter", "Amplarna hänger i luften, så de tar tekniskt sett ingen golvyta.", "Och basilikan? Den har tagit min plats vid bordet.", "Basilikan doftar gott. Förhandlingsläget har blivit grönt."],
   ["Hallen", "grow_light", "Växtlampan gör hallen till ett litet paradis för chilin.", "Ett lila paradis där jag fortfarande behöver kunna gå till dörren.", "Sista kvällen: ge plantorna ljus och relationen lite charm."],
 ];

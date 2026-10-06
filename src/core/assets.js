@@ -42,6 +42,7 @@ export function pushBaseColliders() {
 pushBaseColliders();
 
 export const assets = {
+  sally_walk: imageWithFallback(["images/sally_walk.png"]),
   girl_back: imageWithFallback(["images/sally_back.png"]),
   girl_front: imageWithFallback(["images/sally_front.png"]),
   girl_left: imageWithFallback(["images/sally_left.png"]),

@@ -21,6 +21,8 @@ Kör `python -m http.server 8080` i den här mappen och öppna http://localhost:
 
 Sparfiler och profil har egna Sally-nycklar och är separata från originalspelet.
 
+Sally har en gångcykel i fyra riktningar med växlande steg och armsving. Stegtakten följer avståndet hon faktiskt går. Vid stillastående används hennes vilopos; inställningen Minskade effekter stänger av gånganimationen. Spelaren har också ett mjukt stegstuds och en markskugga.
+
 ## Verifiering
 
 `npm test` testar spelmekanik, Sally som enda level, odlingsföremål, Charma, sparning, scener och handkontroll. `npm run simulate` kör automatiska balansrundor för Sally.

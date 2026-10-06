@@ -18,6 +18,7 @@ import { showGirlTextDialogue, showGuyDialogue } from "./dialogue.js?v=2";
 import { consumeActionAnnoyanceMultiplier, hasDistractAbility, peekActionAnnoyanceMultiplier, tryUseDistract } from "./planning.js";
 import { registerPlayerAction } from "./ai.js";
 import { getChallengeMultiplier } from "./challenges.js";
+import { updateWalking } from "./walking.js";
 
 export function getItemById(id) {
   return world.items.find((item) => item.id === id) || null;
@@ -487,7 +488,10 @@ export function updatePlayer(dt, input, safeSpawnPoint, checkEndConditions) {
   const strength = Math.min(1, len);
   const dx = (mx / len) * speed * strength * dt;
   const dy = (my / len) * speed * strength * dt;
+  const previousX = world.player.x;
+  const previousY = world.player.y;
   moveEntity(world.player, dx, dy);
+  updateWalking(world.player, previousX, previousY, dt);
   if (mx !== 0 || my !== 0) {
     if (Math.abs(mx) > Math.abs(my)) {
       world.player.dir = mx > 0 ? "right" : "left";

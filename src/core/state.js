@@ -200,12 +200,14 @@ export function resetRun(selectedGirlId = world.selectedGirlId, options = {}) {
   world.player.x = 498;
   world.player.y = 422;
   world.player.dir = "front";
+  world.player.walking = { distance: 0, moving: false, strength: 0 };
   world.girlfriend.x = 590;
   world.girlfriend.y = 460;
   world.girlfriend.target.x = 590;
   world.girlfriend.target.y = 460;
   world.girlfriend.targetRoom = "hall";
   world.girlfriend.dir = "front";
+  world.girlfriend.walking = { distance: 0, moving: false, strength: 0 };
   world.girlfriend.speed = 125 * profile.speedFactor;
   world.girlfriend.path = [];
   world.girlfriend.pathIndex = 0;

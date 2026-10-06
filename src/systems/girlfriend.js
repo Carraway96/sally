@@ -5,6 +5,7 @@ import { world } from "../core/state.js";
 import { activePlacementTarget, getSelectedGirlProfile } from "../game/shared.js";
 import { getPlacementMovementMultiplier } from "./planning.js";
 import { updateAiPressure } from "./ai.js";
+import { updateWalking } from "./walking.js";
 
 export function setGirlfriendDestination(x, y, roomKey) {
   const targetChanged =
@@ -30,6 +31,8 @@ export function setGirlfriendDestination(x, y, roomKey) {
 }
 
 export function updateGirlfriend(dt) {
+  const previousX = world.girlfriend.x;
+  const previousY = world.girlfriend.y;
   const profile = getSelectedGirlProfile();
   updateAiPressure(dt);
   const targetPlacement = activePlacementTarget();
@@ -114,6 +117,8 @@ export function updateGirlfriend(dt) {
       world.girlfriend.dir = vy >= 0 ? "front" : "back";
     }
   }
+
+  updateWalking(world.girlfriend, previousX, previousY, dt);
 
   if (dist < 10 && world.girlfriend.pathIndex < world.girlfriend.path.length) {
     world.girlfriend.pathIndex += 1;

@@ -4,7 +4,7 @@ import { ITEM_TYPES, rooms } from "../core/data.js";
 import { world } from "../core/state.js";
 import { clamp } from "../core/utils.js";
 import { activePlacementTarget, getSelectedGirlProfile } from "../game/shared.js";
-import { drawImageContainOrFallback, drawImageOrFallback } from "./primitives.js";
+import { drawWalkingCharacter } from "./character.js";
 import { accessibilityState } from "../core/accessibility.js";
 
 function drawItemSprite(item, type) {
@@ -148,7 +148,7 @@ export function drawPlayer() {
   const spriteKey = `main_${world.player.dir}`;
   const img = assets[spriteKey] || assets.main_front;
   if (img && img.complete && img.naturalWidth > 0) {
-    drawImageContainOrFallback(img, world.player.x, world.player.y, world.player.w, world.player.h, "#5a8cf6", "bottom");
+    drawWalkingCharacter(world.player, img, null, "#5a8cf6");
     return;
   }
 
@@ -233,7 +233,7 @@ export function drawGirlfriend() {
   const fallbackKey = `${profile.spritePrefix}_front`;
   const img = assets[spriteKey] || assets[fallbackKey] || assets.girl_front;
   drawCharmImpactBackdrop();
-  drawImageOrFallback(img, world.girlfriend.x, world.girlfriend.y, world.girlfriend.w, world.girlfriend.h, "#ff9ec2");
+  drawWalkingCharacter(world.girlfriend, img, assets.sally_walk, "#ff9ec2");
   drawCharmImpactForeground();
   drawGirlfriendReaction();
 }
