@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sally</title>
+  <link rel="stylesheet" href="style.css?v=13" />
+</head>
+<body>
+  <main class="app">
+    <header class="topline">
+      <div class="topline-left">
+        <h1>Sally</h1>
+        <div id="gamepadStatus" class="gamepad-status" role="status" aria-live="polite">Handkontroll: tryck A i sidan</div>
+      </div>
+      <div class="topline-right">
+        <div class="hud-panel" aria-live="polite">
+          <section class="hud-card hud-card-controls">
+            <div class="hud-day-wrap">
+              <strong id="uiDay" class="hud-day">Dag 1/3</strong>
+            </div>
+          </section>
+
+          <section class="hud-card hud-card-meters">
+            <div class="hud-meter">
+              <div class="hud-meter-label-row">
+                <span class="hud-meter-label">Tjejifiering</span>
+                <strong id="uiGirlification" class="hud-meter-value">0%</strong>
+              </div>
+              <div class="hud-meter-track">
+                <div id="uiGirlificationFill" class="hud-meter-fill hud-meter-fill-girl" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="hud-meter">
+              <div class="hud-meter-label-row">
+                <span class="hud-meter-label">Relation</span>
+                <strong id="uiRelationship" class="hud-meter-value">Neutral · 0</strong>
+              </div>
+              <div class="hud-meter-track">
+                <div id="uiRelationshipFill" class="hud-meter-fill hud-meter-fill-relationship" style="width:38%"></div>
+              </div>
+            </div>
+
+            <div class="hud-meter">
+              <div class="hud-meter-label-row">
+                <span class="hud-meter-label">Irritation</span>
+                <strong id="uiIrritation" class="hud-meter-value">0%</strong>
+              </div>
+              <div class="hud-meter-track">
+                <div id="uiIrritationFill" class="hud-meter-fill hud-meter-fill-irritation" style="width:0%"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="hud-card hud-card-event">
+            <strong id="uiEvent" class="hud-event-title">Ingen händelse</strong>
+            <span id="uiMood" class="hud-event-subtitle">Läget är lugnt.</span>
+          </section>
+          <details class="hud-extra">
+            <summary>Kontroller, rum och mål</summary>
+            <div class="hud-extra-content">
+              <div class="hud-extra-head">
+                <span id="uiChallenge">Standardrunda</span>
+                <button id="musicToggleBtn" class="music-toggle" type="button" aria-pressed="true">Musik: P&#229;</button>
+              </div>
+              <span id="uiObjective" class="hud-event-subtitle">Ingen daglig uppgift.</span>
+              <strong id="uiStrategy" class="hud-strategy" aria-live="polite"></strong>
+              <section class="hud-card hud-card-actions" aria-label="Snabbknappar">
+                <span class="hud-kicker">Snabbknappar</span>
+                <div id="controlLegend" class="control-legend"></div>
+              </section>
+              <section class="hud-card hud-card-rooms">
+                <span class="hud-kicker">Rumskontroll</span>
+                <div class="hud-room-grid">
+                  <span id="uiRoomVardagsrum" class="hud-room-pill">Vardagsrum: Neutralt</span>
+                  <span id="uiRoomKok" class="hud-room-pill">Kök: Neutralt</span>
+                  <span id="uiRoomBadrum" class="hud-room-pill">Badrum: Neutralt</span>
+                  <span id="uiRoomSovrum" class="hud-room-pill">Sovrum: Neutralt</span>
+                  <span id="uiRoomHall" class="hud-room-pill">Hall: Neutralt</span>
+                </div>
+                <span id="uiRoomEffect" class="hud-event-subtitle"></span>
+              </section>
+              <strong id="controlSummary">Kontroller</strong>
+              <p id="controlDetails"></p>
+              <details class="gamepad-guide">
+                <summary>Handkontrollens knappar</summary>
+                <p>Vänster spak eller styrkors: gå. A öppnar val vid en sak; A igen väljer kompromiss. B stänger. X gömmer, Y kompromissar och LB tar bort. RB använder den specialåtgärd som visas när den är relevant. Back/View kan fortfarande användas för Charma, LT för att stoppa en placering, RT för att stabilisera och L3 för att distrahera. Menu pausar och R3 visar hjälp. I eventscener: A ge plats, B försvara lägenheten.</p>
+              </details>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <p id="playHint" class="play-hint">WASD: gå · 1 göm · 2 kompromissa · 3 ta bort · H hjälp</p>
+    <canvas id="gameCanvas" width="1000" height="640" aria-label="Sally spelduk"></canvas>
+    <section id="eventScene" class="event-scene" role="dialog" aria-modal="true" aria-labelledby="eventSceneTitle" tabindex="-1" hidden>
+      <div class="event-scene-card">
+        <span class="event-scene-kicker">LÄGENHETSLARM · <span id="eventSceneCount">1/2</span></span>
+        <h2 id="eventSceneTitle"></h2>
+        <div class="event-scene-art"><img id="eventSceneImage" src="" alt="" /></div>
+        <p class="event-scene-line"><strong id="eventSceneSpeaker"></strong> <span id="eventSceneLine"></span></p>
+        <p id="eventSceneEffect" class="event-scene-effect"></p>
+        <p id="eventSceneOutcome" class="event-scene-outcome" hidden></p>
+        <div class="event-scene-actions">
+          <button id="eventSceneNext" type="button">Nästa bild</button>
+          <button id="eventSceneSkip" type="button" class="secondary">Hoppa över</button>
+          <button id="eventSceneShare" type="button" hidden>Ge plats</button>
+          <button id="eventSceneDefend" type="button" class="secondary" hidden>Försvara lägenheten</button>
+        </div>
+        <p id="eventSceneHint" class="event-scene-hint"></p>
+      </div>
+    </section>
+    <section id="mobileMenu" class="mobile-menu" aria-label="Spelmeny"></section>
+
+    <section id="dialogueDock" class="dialogue-dock" aria-live="polite">
+      <img id="dialogueAvatar" class="dialogue-avatar" src="images/sally_avatar.png" alt="Sally med valnötsörhängen" />
+      <div class="dialogue-copy">
+        <span id="dialogueName" class="dialogue-name">Sally</span>
+        <p id="dialogueText" class="dialogue-text">Ingen kommentar just nu.</p>
+      </div>
+    </section>
+
+    <section id="touchControls" class="touch-controls" aria-label="Pekkontroller">
+      <div class="touch-dpad">
+        <button type="button" data-game-key="w" aria-label="Gå upp">▲</button>
+        <button type="button" data-game-key="a" aria-label="Gå vänster">◀</button>
+        <button type="button" data-game-key="s" aria-label="Gå ner">▼</button>
+        <button type="button" data-game-key="d" aria-label="Gå höger">▶</button>
+      </div>
+      <div class="touch-actions">
+        <button type="button" data-game-key="e">Val</button>
+        <button type="button" data-game-key="1" aria-label="Göm föremål">1 Göm</button>
+        <button type="button" data-game-key="2" aria-label="Kompromissa om föremål">2 Komp.</button>
+        <button type="button" data-game-key="3" aria-label="Ta bort föremål">3 Bort</button>
+        <button type="button" data-game-key="f" aria-label="Specialåtgärd">Special</button>
+        <button type="button" data-game-key="p" aria-label="Pausa spelet">Paus</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="src/main.js?v=26"></script>
+</body>
+</html>
+
+
+
+
+
+
+

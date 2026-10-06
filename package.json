@@ -1,0 +1,9 @@
+{
+  "name": "sally",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/gameplay.test.js",
+    "simulate": "node scripts/simulate-runs.js"
+  }
+}

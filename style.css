@@ -1,0 +1,908 @@
+:root {
+  --bg: #f3eee7;
+  --ink: #1c2229;
+  --panel: #fffaf2;
+  --accent: #4f7a67;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%, #fff8ef 0%, #f2e7d8 38%, #d6d9de 100%);
+}
+
+body {
+  padding: 20px;
+}
+
+.app {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-areas:
+    "title hud"
+    "canvas hud"
+    "dialogue hud"
+    "help hud"
+    "touch hud";
+  column-gap: 16px;
+  row-gap: 12px;
+  align-items: start;
+}
+
+.topline {
+  display: contents;
+}
+
+.topline-left {
+  grid-area: title;
+  display: grid;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+h1 {
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.topline p {
+  margin: 0;
+  opacity: 0.82;
+  font-size: 0.98rem;
+}
+
+.gamepad-status {
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 9px;
+  border: 1px solid rgba(76, 99, 106, 0.35);
+  border-radius: 8px;
+  background: rgba(255, 250, 242, 0.85);
+  font-size: 0.83rem;
+}
+
+.gamepad-guide {
+  max-width: 800px;
+  font-size: 0.82rem;
+}
+
+.gamepad-guide summary {
+  width: fit-content;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.gamepad-guide p {
+  margin-top: 5px;
+  line-height: 1.35;
+}
+
+.help details { padding: 10px 14px; border-radius: 12px; background: rgba(255, 250, 242, 0.9); }
+.help summary { cursor: pointer; font-weight: bold; }
+.help p { margin: 8px 0 0; line-height: 1.45; }
+
+.event-scene[hidden] { display: none; }
+.event-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(42, 28, 42, 0.66);
+}
+.event-scene-card {
+  width: min(100%, 600px);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 22px;
+  border: 3px solid #74526a;
+  border-radius: 20px;
+  background: #fffaf4;
+  box-shadow: 0 18px 55px rgba(20, 10, 20, 0.4);
+  color: #4b3046;
+}
+.event-scene-kicker { font-size: 0.78rem; font-weight: bold; letter-spacing: 0.11em; color: #8b4e71; }
+.event-scene h2 { margin: 5px 0 10px; font-size: clamp(1.35rem, 4vw, 2rem); }
+.event-scene-art {
+  display: grid;
+  place-items: center;
+  height: min(29vh, 195px);
+  min-height: 0;
+  overflow: hidden;
+  border: 2px solid #bc88a4;
+  border-radius: 14px;
+  background: radial-gradient(circle, #fff8f4 15%, #f3c9dd 100%);
+}
+.event-scene-art img { display: block; width: 70%; height: 90%; min-height: 0; object-fit: contain; }
+.event-scene-line { min-height: 58px; margin: 14px 0; font-size: 1.12rem; line-height: 1.4; }
+.event-scene-line strong { display: inline-block; margin-right: 5px; color: #a44978; }
+.event-scene-effect { margin: 8px 0 16px; padding: 10px 12px; border-left: 5px solid #e37bae; background: #f9e9f0; line-height: 1.35; }
+.event-scene-outcome { margin: 8px 0 16px; padding: 9px 12px; border-radius: 9px; background: #e9f4ec; color: #24543c; font-weight: bold; }
+.event-scene-actions { display: flex; gap: 10px; }
+.event-scene-actions.is-choice { flex-direction: column; }
+.event-scene-actions button { flex: 1; min-height: 47px; border: 0; border-radius: 10px; background: #e470a9; color: white; font: bold 1rem "Trebuchet MS", sans-serif; cursor: pointer; }
+.event-scene-actions button[hidden] { display: none; }
+.event-scene-actions button.secondary { background: #755c70; }
+.event-scene-hint { margin: 10px 0 0; font-size: 0.82rem; color: #725569; }
+
+.topline-right {
+  grid-area: hud;
+  width: 100%;
+  max-width: none;
+}
+
+.hud-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.hud-card {
+  border: 1px solid rgba(83, 91, 110, 0.18);
+  border-radius: 16px;
+  padding: 12px 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 242, 236, 0.96)),
+    radial-gradient(circle at top left, rgba(255, 192, 218, 0.18), transparent 42%);
+  box-shadow:
+    0 10px 24px rgba(54, 53, 63, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.hud-card-controls {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.control-legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 8px; }
+.control-tile { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 5px 7px; border: 1px solid #ded6db; border-radius: 9px; background: #fffafc; font-size: 0.8rem; font-weight: bold; }
+.control-tile.is-primary { grid-column: 1 / -1; border-color: #aa5f91; background: #fff0f7; font-size: 0.93rem; }
+.control-tile.is-cooling { opacity: 0.63; }
+.control-tile-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.control-tile.is-primary .control-tile-label { white-space: normal; }
+.control-glyph { flex: none; display: inline-grid; place-items: center; min-width: 29px; height: 29px; padding: 0 5px; border: 2px solid #4e4654; border-radius: 7px; background: white; color: #362d39; font: bold 0.78rem "Trebuchet MS", sans-serif; box-shadow: 0 2px 0 rgba(30, 20, 32, 0.22); }
+.control-glyph.is-xbox { border-radius: 50%; color: white; border-color: rgba(0, 0, 0, 0.22); }
+.control-glyph.is-a { background: #4fa354; }
+.control-glyph.is-b { background: #d8504b; }
+.control-glyph.is-x { background: #397fcb; }
+.control-glyph.is-y { background: #daa62e; }
+.control-glyph.is-shoulder { border-radius: 9px; background: #444b60; color: white; }
+.control-glyph.is-stick { border-radius: 50%; background: #636a74; color: white; }
+.control-glyph.is-view { border-radius: 9px; background: #865483; color: white; }
+.hud-meter-fill-relationship { background: linear-gradient(90deg, #d98aa3, #86bf89); }
+.relation-explainer { display: block; margin-top: 4px; color: #645d66; font-size: 0.7rem; line-height: 1.25; }
+.hud-card-controls { order: 0; }
+.hud-card-actions { order: 1; }
+.hud-card-event { order: 2; }
+.hud-card-meters { order: 3; }
+.hud-card-rooms { order: 4; }
+
+.hud-ability {
+  display: grid;
+  gap: 2px;
+  color: #4f4454;
+  font-size: 0.74rem;
+  line-height: 1.25;
+}
+
+.hud-card-meters {
+  display: grid;
+  gap: 10px;
+}
+
+.hud-card-event {
+  display: grid;
+  gap: 4px;
+}
+
+.hud-card-event.is-urgent {
+  border-color: #bc5680;
+  box-shadow: 0 0 0 3px rgba(207, 80, 135, 0.18);
+}
+
+.hud-strategy {
+  color: #8b2754;
+  font-size: 0.91rem;
+  line-height: 1.35;
+}
+
+.hud-card-rooms {
+  display: grid;
+  gap: 8px;
+}
+
+.hud-kicker {
+  color: #8a6476;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hud-day-wrap {
+  display: grid;
+  gap: 2px;
+}
+
+.hud-day {
+  color: #2d2e38;
+  font-size: 1.1rem;
+  line-height: 1.1;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.music-toggle {
+  border: 1px solid #2f3e48;
+  background: #fff8ef;
+  color: #1f2a35;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(52, 47, 57, 0.1);
+}
+
+.music-toggle:hover {
+  background: #f5e4cf;
+}
+
+.music-toggle[aria-pressed="false"] {
+  opacity: 0.72;
+  background: #ede7df;
+}
+
+.music-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hud-meter {
+  display: grid;
+  gap: 6px;
+}
+
+.hud-meter-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hud-meter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #51485c;
+}
+
+.hud-meter-value {
+  font-size: 0.88rem;
+  color: #231f2a;
+}
+
+.hud-meter-track {
+  position: relative;
+  overflow: hidden;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(149, 146, 157, 0.18);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.hud-meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 180ms ease-out;
+}
+
+.hud-meter-fill-girl {
+  background: linear-gradient(90deg, #ff9fc8, #ff72a8);
+}
+
+.hud-meter-fill-irritation {
+  background: linear-gradient(90deg, #ffb1a7, #ea5a5a);
+}
+
+body.accessibility-high-contrast {
+  --bg: #101319;
+  --ink: #ffffff;
+  --panel: #171d26;
+  --accent: #f6d365;
+  background: #101319;
+}
+
+body.accessibility-high-contrast .hud-card,
+body.accessibility-high-contrast .help {
+  background: #171d26;
+  color: #ffffff;
+  border-color: #f6d365;
+}
+
+body.accessibility-high-contrast .hud-meter-track {
+  background: #000000;
+  outline: 1px solid #ffffff;
+}
+
+body.accessibility-colorblind .hud-meter-fill-girl {
+  background: repeating-linear-gradient(135deg, #225ea8 0 8px, #ffffff 8px 12px);
+}
+
+body.accessibility-colorblind .hud-meter-fill-irritation {
+  background: repeating-linear-gradient(45deg, #d95f02 0 8px, #fff4cc 8px 12px);
+}
+
+body.accessibility-reduced-motion *,
+body.accessibility-reduced-motion *::before,
+body.accessibility-reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+.hud-event-title {
+  color: #2b2331;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.hud-event-subtitle {
+  color: #6b6272;
+  font-size: 0.8rem;
+}
+
+.hud-room-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hud-room-pill {
+  border: 1px solid rgba(132, 141, 160, 0.24);
+  background: rgba(247, 247, 249, 0.9);
+  color: #283242;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.hud-room-pill.is-neutral {
+  background: rgba(232, 247, 235, 0.95);
+  border-color: rgba(124, 181, 124, 0.35);
+}
+
+.hud-room-pill.is-contested {
+  background: rgba(255, 239, 190, 0.96);
+  border-color: rgba(224, 175, 67, 0.35);
+}
+
+.hud-room-pill.is-girlified {
+  background: rgba(255, 217, 232, 0.96);
+  border-color: rgba(239, 117, 168, 0.35);
+}
+
+canvas {
+  grid-area: canvas;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1000 / 640;
+  object-fit: contain;
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  border: 2px solid #2f3e48;
+  border-radius: 12px;
+  background: #f7f4ef;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.2);
+}
+
+.dialogue-dock {
+  grid-area: dialogue;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-height: 110px;
+  padding: 14px 16px;
+  border: 1px solid rgba(90, 78, 94, 0.18);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(43, 31, 44, 0.94), rgba(28, 21, 33, 0.96)),
+    radial-gradient(circle at top left, rgba(255, 171, 215, 0.18), transparent 45%);
+  box-shadow: 0 14px 26px rgba(20, 14, 28, 0.22);
+}
+
+.dialogue-dock.is-hidden {
+  opacity: 0.82;
+}
+
+.dialogue-avatar {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 214, 232, 0.6);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dialogue-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.dialogue-name {
+  color: #ffcfe6;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.dialogue-text {
+  margin: 0;
+  color: #fff7fb;
+  font-size: 1.22rem;
+  line-height: 1.35;
+}
+
+.help {
+  grid-area: help;
+  background: var(--panel);
+  border: 1px solid #c7c2b8;
+  border-radius: 10px;
+  padding: 8px 10px;
+  line-height: 1.45;
+}
+
+.touch-controls {
+  grid-area: touch;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px;
+  touch-action: none;
+}
+
+.touch-dpad,
+.touch-actions {
+  display: grid;
+  gap: 6px;
+}
+
+.touch-dpad {
+  grid-template-columns: repeat(3, 44px);
+}
+
+.touch-dpad button:nth-child(1) { grid-column: 2; }
+.touch-dpad button:nth-child(2) { grid-column: 1; grid-row: 2; }
+.touch-dpad button:nth-child(3) { grid-column: 2; grid-row: 2; }
+.touch-dpad button:nth-child(4) { grid-column: 3; grid-row: 2; }
+
+.touch-actions {
+  grid-template-columns: repeat(3, 44px);
+}
+
+.touch-actions button {
+  font-size: 0.72rem;
+}
+
+.touch-controls button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #475465;
+  border-radius: 10px;
+  background: rgba(255, 250, 242, 0.92);
+  color: #1c2229;
+  font-weight: 800;
+  touch-action: none;
+}
+
+.touch-controls button:active {
+  background: #ffc2dd;
+  transform: translateY(1px);
+}
+
+kbd {
+  border: 1px solid #777;
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 1px 5px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 860px) {
+  body {
+    padding: 10px;
+  }
+
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "canvas"
+      "touch"
+      "hud"
+      "dialogue"
+      "help";
+    gap: 8px;
+  }
+
+  .topline p {
+    font-size: 0.9rem;
+  }
+
+  .topline-right {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hud-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .dialogue-dock {
+    grid-template-columns: 68px minmax(0, 1fr);
+    min-height: 96px;
+    padding: 12px;
+  }
+
+  .dialogue-avatar {
+    width: 68px;
+    height: 68px;
+  }
+
+  .dialogue-text {
+    font-size: 1.02rem;
+  }
+
+  .touch-controls {
+    display: none;
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    border: 1px solid rgba(71, 84, 101, 0.35);
+    border-radius: 12px;
+    background: rgba(255, 250, 242, 0.97);
+  }
+}
+
+@media (max-width: 860px) and (any-pointer: coarse) {
+  .app:not(.is-menu):not(.uses-gamepad) .touch-controls { display: flex; }
+}
+
+@media (min-width: 861px) and (max-height: 850px) {
+  body {
+    padding: 10px;
+  }
+
+  .app {
+    gap: 8px;
+  }
+
+  .topline {
+    gap: 0;
+  }
+
+  .topline p {
+    display: none;
+  }
+
+  .hud-panel {
+    gap: 6px;
+  }
+
+  .hud-card {
+    padding: 8px 10px;
+    border-radius: 11px;
+  }
+
+  .hud-card-controls,
+  .hud-card-meters,
+  .hud-card-event,
+  .hud-card-rooms {
+    gap: 6px;
+  }
+
+  canvas {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .dialogue-dock {
+    min-height: 78px;
+    padding: 8px 10px;
+  }
+
+  .dialogue-avatar {
+    width: 58px;
+    height: 58px;
+  }
+
+  .dialogue-text {
+    font-size: 1rem;
+  }
+
+  .help {
+    font-size: 0.78rem;
+  }
+}
+
+.app.is-menu {
+  max-width: 1000px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "title" "canvas";
+}
+
+.app.is-menu .topline-right,
+.app.is-menu .dialogue-dock,
+.app.is-menu .help,
+.app.is-menu .touch-controls {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .app.is-menu {
+    grid-template-areas: "title" "mobile-menu";
+  }
+
+  .app.is-menu canvas {
+    display: none;
+  }
+
+  .app.is-menu .mobile-menu {
+    grid-area: mobile-menu;
+    display: grid;
+    gap: 12px;
+    border: 1px solid rgba(83, 91, 110, 0.25);
+    border-radius: 16px;
+    padding: 20px;
+    background: rgba(28, 24, 36, 0.92);
+    color: #fff;
+  }
+
+  .mobile-menu h2,
+  .mobile-menu p {
+    margin: 0;
+  }
+
+  .mobile-menu h2 {
+    font-size: 1.6rem;
+  }
+
+  .mobile-menu ul {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.45;
+  }
+
+  .mobile-menu button {
+    min-height: 52px;
+    padding: 10px 12px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    background: #e77cb2;
+    color: #fff;
+    font: bold 1rem "Trebuchet MS", sans-serif;
+    text-align: left;
+  }
+
+  .mobile-menu button:disabled {
+    opacity: 0.5;
+  }
+
+  .mobile-menu button[aria-pressed="true"] {
+    background: #864571;
+    border-width: 3px;
+  }
+
+  .mobile-menu .mobile-menu-detail {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.86rem;
+    font-weight: normal;
+  }
+
+  .mobile-cutscene-frame {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    min-height: 230px;
+    padding: 12px;
+    border: 2px solid #8c6680;
+    border-radius: 12px;
+    background: radial-gradient(circle at center, #fffaf3 5%, var(--scene-accent) 180%);
+    animation: cutscene-enter 320ms ease-out;
+  }
+
+  .app.is-menu .mobile-menu.has-cutscene {
+    background: #fff9f3;
+    color: #4b3046;
+  }
+
+  .app.is-menu .mobile-menu.has-cutscene button {
+    background: #ec79b2;
+  }
+
+  .mobile-cutscene-room {
+    justify-self: start;
+    font-size: 0.85rem;
+    color: #62435b;
+  }
+
+  .mobile-cutscene-frame img {
+    width: min(64%, 190px);
+    height: 155px;
+    object-fit: contain;
+  }
+
+  .mobile-cutscene-frame strong {
+    justify-self: start;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: #fff;
+    color: #62435b;
+  }
+
+  .accessibility-reduced-motion .mobile-cutscene-frame {
+    animation: none;
+  }
+}
+
+@keyframes cutscene-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* The live game keeps the apartment in focus. Extra information is opt-in. */
+.app:not(.is-menu) {
+  max-width: 1080px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "title" "hud" "hint" "canvas" "dialogue" "touch";
+  gap: 7px;
+}
+
+.app:not(.is-menu) .topline-left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+}
+
+.app:not(.is-menu) h1 { font-size: 1.55rem; }
+.app:not(.is-menu) .gamepad-status {
+  padding: 3px 7px;
+  border: 0;
+  background: transparent;
+  color: #55515b;
+  font-size: 0.75rem;
+}
+
+.app:not(.is-menu) .hud-panel {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 5px 8px;
+}
+.app:not(.is-menu) .hud-panel > * { order: 0; }
+.app:not(.is-menu) .hud-card {
+  padding: 7px 10px;
+  border-radius: 8px;
+  box-shadow: none;
+  background: rgba(255, 250, 245, 0.88);
+}
+.app:not(.is-menu) .hud-card-controls {
+  display: flex;
+  align-items: center;
+}
+.app:not(.is-menu) .hud-day { font-size: 0.98rem; }
+.app:not(.is-menu) .hud-card-meters {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  align-items: center;
+  gap: 13px;
+}
+.app:not(.is-menu) .hud-meter { gap: 3px; }
+.app:not(.is-menu) .hud-meter-track { height: 7px; }
+.app:not(.is-menu) .hud-meter-label,
+.app:not(.is-menu) .hud-meter-value { font-size: 0.78rem; }
+.app:not(.is-menu) .hud-card-event {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  border-left: 4px solid #df83a9;
+}
+.app:not(.is-menu) .hud-card-event.is-idle { display: none; }
+.app:not(.is-menu) .hud-event-title { font-size: 0.87rem; white-space: nowrap; }
+.app:not(.is-menu) .hud-event-subtitle { font-size: 0.79rem; }
+.app:not(.is-menu) .hud-extra {
+  grid-column: 1 / -1;
+  color: #49414a;
+  font-size: 0.78rem;
+}
+.hud-extra > summary { width: fit-content; cursor: pointer; font-weight: 700; }
+.hud-extra-content {
+  display: grid;
+  gap: 8px;
+  margin-top: 7px;
+  padding: 10px;
+  border: 1px solid #d7c9d2;
+  border-radius: 10px;
+  background: #fffaf5;
+}
+.hud-extra-content p { margin: 0; line-height: 1.35; }
+.hud-extra-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.hud-extra .hud-card-actions,
+.hud-extra .hud-card-rooms { order: 0; }
+.hud-extra .control-legend { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hud-extra .control-tile.is-primary { grid-column: auto; }
+
+.play-hint {
+  grid-area: hint;
+  margin: 0;
+  color: #665b67;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+.app.is-menu .play-hint { display: none; }
+
+.app:not(.is-menu) canvas {
+  width: min(100%, 1000px, calc((100vh - 170px) * 1.5625));
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.18);
+}
+.app:not(.is-menu) .dialogue-dock {
+  width: min(100%, 1000px);
+  min-height: 66px;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+.app:not(.is-menu) .dialogue-dock.is-hidden { display: none; }
+.app:not(.is-menu) .dialogue-avatar { width: 46px; height: 46px; border-radius: 8px; }
+.app:not(.is-menu) .dialogue-text { font-size: 0.98rem; }
+
+@media (max-width: 860px) {
+  .app:not(.is-menu) {
+    grid-template-areas: "title" "hud" "hint" "canvas" "touch" "dialogue";
+  }
+  .app:not(.is-menu) .hud-panel { grid-template-columns: 1fr; }
+  .app:not(.is-menu) .hud-card-event,
+  .app:not(.is-menu) .hud-extra { grid-column: auto; }
+  .app:not(.is-menu) .hud-card-meters { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .app:not(.is-menu) .hud-meter-label,
+  .app:not(.is-menu) .hud-meter-value { font-size: 0.68rem; }
+  .app:not(.is-menu) .hud-card-event { flex-wrap: wrap; gap: 3px 8px; }
+  .hud-extra .control-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app:not(.is-menu) canvas { width: 100%; }
+}

@@ -1,0 +1,27 @@
+export const canvas = document.getElementById("gameCanvas");
+export const ctx = canvas.getContext("2d");
+export const musicToggleBtn = document.getElementById("musicToggleBtn");
+export const uiDay = document.getElementById("uiDay");
+export const uiGirlification = document.getElementById("uiGirlification");
+export const uiIrritation = document.getElementById("uiIrritation");
+export const uiGirlificationFill = document.getElementById("uiGirlificationFill");
+export const uiIrritationFill = document.getElementById("uiIrritationFill");
+export const uiEvent = document.getElementById("uiEvent");
+export const uiMood = document.getElementById("uiMood");
+export const uiStrategy = document.getElementById("uiStrategy");
+export const uiObjective = document.getElementById("uiObjective");
+export const uiAbility = document.getElementById("uiAbility");
+export const uiChallenge = document.getElementById("uiChallenge");
+export const uiRoomVardagsrum = document.getElementById("uiRoomVardagsrum");
+export const uiRoomKok = document.getElementById("uiRoomKok");
+export const uiRoomBadrum = document.getElementById("uiRoomBadrum");
+export const uiRoomSovrum = document.getElementById("uiRoomSovrum");
+export const uiRoomHall = document.getElementById("uiRoomHall");
+export const uiRoomEffect = document.getElementById("uiRoomEffect");
+export const dialogueDock = document.getElementById("dialogueDock");
+export const dialogueAvatar = document.getElementById("dialogueAvatar");
+export const dialogueName = document.getElementById("dialogueName");
+export const dialogueText = document.getElementById("dialogueText");
+
+export const WIDTH = canvas.width;
+export const HEIGHT = canvas.height;
